@@ -156,7 +156,6 @@ class RequestPanel(Gtk.Paned):
 
     def on_method_combo_box_changed(self, combo_box: Gtk.ComboBoxText):
         self.method = combo_box.get_active_text()
-        print(self.method)
 
     def get_headers(self) -> dict[str, str]:
         headers = {}
