@@ -17,6 +17,7 @@
 
 from gi.repository import Gtk
 
+import tab_panel
 from request_panel import RequestPanel
 from sidebar import Sidebar
 
@@ -52,11 +53,15 @@ class CourierWindow(Gtk.ApplicationWindow):
         hpaned = Gtk.Paned.new(Gtk.Orientation.HORIZONTAL)
         hpaned.set_position(250)
 
-        self.request_panel = RequestPanel()
+        self.tab_panel = tab_panel.TabPanel()
+        self.tab_panel.set_scrollable(True)
+        self.tab_panel.connect("page_removed", self.on_tab_panel_page_removed)
+        self.tab_panel.new_tab("New Request", RequestPanel())
+
         self.sidebar = Sidebar()
 
         hpaned.pack1(self.sidebar, False, False)
-        hpaned.pack2(self.request_panel, True, False)
+        hpaned.pack2(self.tab_panel, True, False)
 
         self.add(hpaned)
         self.set_size_request(225, 150)
@@ -80,6 +85,7 @@ class CourierWindow(Gtk.ApplicationWindow):
     def create_start_header_buttons(self) -> Gtk.Widget:
         start_box = Gtk.Box.new(orientation=Gtk.Orientation.HORIZONTAL, spacing=DEFAULT_SPACING)
         new_tab_button = Gtk.Button.new_from_icon_name("tab-new-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
+        new_tab_button.connect("clicked", self.on_new_tab_button_clicked)
         import_button = Gtk.Button.new_with_label("Import")
         start_box.pack_start(new_tab_button, True, False, 0)
         start_box.pack_start(import_button, True, False, 0)
@@ -88,3 +94,12 @@ class CourierWindow(Gtk.ApplicationWindow):
     def create_end_header_buttons(self) -> Gtk.Widget:
         new_menu_button = Gtk.Button.new_from_icon_name("open-menu", Gtk.IconSize.SMALL_TOOLBAR)
         return new_menu_button
+
+    def on_tab_panel_page_removed(self, notebook, child, page_num):
+        print(f"Page removed! num: {page_num}, notebook n of pages: {notebook.get_n_pages()}")
+        if notebook.get_n_pages() == 0:
+            print("entrou aqui")
+            notebook.new_tab("New Request", RequestPanel())
+
+    def on_new_tab_button_clicked(self, button: Gtk.Button):
+        self.tab_panel.new_tab("New Request", RequestPanel())
