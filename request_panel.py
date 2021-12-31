@@ -1,10 +1,10 @@
 from gi.repository import Gtk, GtkSource, GObject, Pango
 
 import logging
-import requests
 
 import constants
 from request_handler import RequestHandler
+
 
 class RequestPanel(Gtk.Paned):
 
