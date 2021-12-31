@@ -32,10 +32,10 @@ class TabPanel(Gtk.Notebook):
         self.set_scrollable(True)
 
     def new_tab(self, title: str, content: Gtk.Widget):
-        print(f"title: {title} with content {content}")
         tab_handle = TabHandle(title=title, parent=self)
         page = Gtk.ScrolledWindow()
         page.add(content)
         self.append_page(page, tab_handle)
+        self.set_tab_reorderable(page, True)
         self.show_all()
 

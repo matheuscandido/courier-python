@@ -55,7 +55,6 @@ class CourierWindow(Gtk.ApplicationWindow):
 
         self.tab_panel = tab_panel.TabPanel()
         self.tab_panel.set_scrollable(True)
-        self.tab_panel.connect("page_removed", self.on_tab_panel_page_removed)
         self.tab_panel.new_tab("New Request", RequestPanel())
 
         self.sidebar = Sidebar()
@@ -95,11 +94,5 @@ class CourierWindow(Gtk.ApplicationWindow):
         new_menu_button = Gtk.Button.new_from_icon_name("open-menu", Gtk.IconSize.SMALL_TOOLBAR)
         return new_menu_button
 
-    def on_tab_panel_page_removed(self, notebook, child, page_num):
-        print(f"Page removed! num: {page_num}, notebook n of pages: {notebook.get_n_pages()}")
-        if notebook.get_n_pages() == 0:
-            print("entrou aqui")
-            notebook.new_tab("New Request", RequestPanel())
-
     def on_new_tab_button_clicked(self, button: Gtk.Button):
-        self.tab_panel.new_tab("New Request", RequestPanel())
+        self.tab_panel.new_tab("New Request " + str(self.tab_panel.get_n_pages() + 1), RequestPanel())
