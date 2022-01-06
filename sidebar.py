@@ -1,4 +1,5 @@
 from gi.repository import Gtk, GObject
+from collection_manager import CollectionManager
 
 import constants
 
@@ -15,9 +16,12 @@ JSON_REQUESTS = (
 
 class Sidebar(Gtk.ScrolledWindow):
 
-    def __init__(self):
+    def __init__(self, collection_manager: CollectionManager):
         super().__init__()
         self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+
+        self.collection_manager = collection_manager
+        self.collection_manager.load_all_collections()
 
         self.tree_view = Gtk.TreeView.new()
         self.setup_tree_view()

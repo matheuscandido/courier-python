@@ -196,3 +196,6 @@ __pypackages__/
 !.vscode/*.code-snippets
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,pythonvanilla,pycharm
+
+# Author added ignores
+*.log

@@ -16,6 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from gi.repository import Gtk
+from collection_manager import CollectionManager
 
 import tab_panel
 from request_panel import RequestPanel
@@ -57,7 +58,8 @@ class CourierWindow(Gtk.ApplicationWindow):
         self.tab_panel.set_scrollable(True)
         self.tab_panel.new_tab("New Request", RequestPanel())
 
-        self.sidebar = Sidebar()
+        self.collection_manager = CollectionManager()
+        self.sidebar = Sidebar(self.collection_manager)
 
         hpaned.pack1(self.sidebar, False, False)
         hpaned.pack2(self.tab_panel, True, False)
@@ -65,6 +67,8 @@ class CourierWindow(Gtk.ApplicationWindow):
         self.add(hpaned)
         self.set_size_request(225, 150)
         self.show_all()
+
+        
 
     def setup_header_bar(self):
         self.header_bar.set_show_close_button(True)
