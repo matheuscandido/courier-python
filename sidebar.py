@@ -3,8 +3,9 @@ from collection_manager import CollectionManager
 
 import constants
 
-METHOD = 0
-NAME = 1
+TYPE = 0
+METHOD = 1
+NAME = 2
 
 JSON_REQUESTS = (
     ("GET", "Get Item"),
@@ -13,6 +14,9 @@ JSON_REQUESTS = (
     ("PATCH", "Amend Item"),
     ("DELETE", "Delete Item")
 )
+
+TREE_COLLECTION = 0
+TREE_REQUEST = 1
 
 class Sidebar(Gtk.ScrolledWindow):
 
@@ -26,12 +30,22 @@ class Sidebar(Gtk.ScrolledWindow):
         self.tree_view = Gtk.TreeView.new()
         self.setup_tree_view()
 
-        tree_view_store = Gtk.ListStore.new((GObject.TYPE_STRING, GObject.TYPE_STRING))
-        for row in JSON_REQUESTS:
-            iter = tree_view_store.append(None)
-            tree_view_store.set(iter, METHOD, row[METHOD], NAME, row[NAME])
+        # Type, Method, Method
+        self.model_store = Gtk.TreeStore.new((
+            GObject.TYPE_BOOLEAN, 
+            GObject.TYPE_STRING, 
+            GObject.TYPE_STRING
+        ))
 
-        self.tree_view.set_model(tree_view_store)
+        for collection in self.collection_manager.colletions:
+            coll_iter = self.model_store.append(None)
+            self.model_store.set(coll_iter, TYPE, TREE_COLLECTION, METHOD, "", NAME, collection["info"]["name"])
+
+            for item in collection["item"]:
+                item_iter = self.model_store.append(coll_iter)
+                self.model_store.set(item_iter, TYPE, TREE_REQUEST, METHOD, item["request"]["method"], NAME, item["name"])
+        
+        self.tree_view.set_model(self.model_store)
 
         self.add(self.tree_view)
     
