@@ -1,23 +1,22 @@
 from gi.repository import Gtk, GObject
 from collection_manager import CollectionManager
 
-import constants
 from request_panel import RequestPanel
 
 TYPE = 0
 METHOD = 1
 NAME = 2
 
-JSON_REQUESTS = (
-    ("GET", "Get Item"),
-    ("POST", "Create Item"),
-    ("PUT", "Change Item"),
-    ("PATCH", "Amend Item"),
-    ("DELETE", "Delete Item")
-)
-
 TREE_COLLECTION = 0
 TREE_REQUEST = 1
+
+METHOD_COLORS = {
+    "GET": "#22FF00",
+    "POST": "#FFEE00",
+    "PUT": "#0055FF",
+    "PATCH": "#000000",
+    "DELETE": "#FF0000"
+}
 
 class Sidebar(Gtk.ScrolledWindow):
 
@@ -55,11 +54,16 @@ class Sidebar(Gtk.ScrolledWindow):
     def setup_tree_view(self):
         renderer = Gtk.CellRendererText.new()
         column = Gtk.TreeViewColumn("Method", renderer, text=METHOD)
+        column.set_cell_data_func(renderer, self.cell_data_method_column)
         self.tree_view.append_column(column)
 
         renderer = Gtk.CellRendererText.new()
         column = Gtk.TreeViewColumn("Name", renderer, text=NAME)
         self.tree_view.append_column(column)
+
+    def cell_data_method_column(self, column, renderer, model, iter, data):
+        (method,) = model.get(iter, METHOD)
+        renderer.props.foreground = self.get_method_color(method)
 
     def on_row_activated_signal(self, treeview: Gtk.TreeView, path: Gtk.TreePath, column: Gtk.TreeViewColumn):
         model: Gtk.TreeModel = treeview.get_model()
@@ -72,3 +76,9 @@ class Sidebar(Gtk.ScrolledWindow):
             if len(name) > 20:
                 name = name[:20] + "..."
             self.window.tab_panel.new_tab(f"{method} {name}", RequestPanel(method=method))
+
+    def get_method_color(self, method: str) -> str:
+        if method in METHOD_COLORS:
+            return METHOD_COLORS[method]
+        else:
+            return "#FFFFFF"
