@@ -2,8 +2,11 @@
 
 ### To-Do
 
-- [ ] Load collections into a proper tree view on sidebar
-- [ ] Click on request in the sidebar and open it on a new tab
+- [x] Load collections into a proper tree view on sidebar
+    - [-] Pretty renderer for colored method verbs
+    - [ ] Model  treestore with full request info from .json
+    - [ ] Collection v2.1 full spec parser
+- [x] Click on request in the sidebar and open it on a new tab
 - [ ] Implement importing new collections
 - [ ] Editing and saving open requests
 - [ ] Add new requests to existing collections
@@ -12,3 +15,4 @@
 - [ ] Add proper exception handling everywhere
 - [ ] Add breaks for misbehaviors on the UI (ex: send request with empty URL field)
 - [ ] Add query params tab to request
+- [ ] Move loading collections to a new thread on startup
