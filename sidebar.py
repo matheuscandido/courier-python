@@ -2,6 +2,7 @@ from gi.repository import Gtk, GObject
 from collection_manager import CollectionManager
 
 import constants
+from request_panel import RequestPanel
 
 TYPE = 0
 METHOD = 1
@@ -20,8 +21,9 @@ TREE_REQUEST = 1
 
 class Sidebar(Gtk.ScrolledWindow):
 
-    def __init__(self, collection_manager: CollectionManager):
+    def __init__(self, collection_manager: CollectionManager, window: Gtk.ApplicationWindow):
         super().__init__()
+        self.window = window
         self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
 
         self.collection_manager = collection_manager
@@ -29,6 +31,7 @@ class Sidebar(Gtk.ScrolledWindow):
 
         self.tree_view = Gtk.TreeView.new()
         self.setup_tree_view()
+        self.tree_view.connect("row-activated", self.on_row_activated_signal)
 
         # Type, Method, Method
         self.model_store = Gtk.TreeStore.new((
@@ -57,3 +60,15 @@ class Sidebar(Gtk.ScrolledWindow):
         renderer = Gtk.CellRendererText.new()
         column = Gtk.TreeViewColumn("Name", renderer, text=NAME)
         self.tree_view.append_column(column)
+
+    def on_row_activated_signal(self, treeview: Gtk.TreeView, path: Gtk.TreePath, column: Gtk.TreeViewColumn):
+        model: Gtk.TreeModel = treeview.get_model()
+        iter = model.get_iter(path)
+        if iter:
+            (row_type, method, name) = model.get(iter, TYPE, METHOD, NAME)
+            if row_type == TREE_COLLECTION:
+                return
+            
+            if len(name) > 20:
+                name = name[:20] + "..."
+            self.window.tab_panel.new_tab(f"{method} {name}", RequestPanel(method=method))

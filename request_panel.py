@@ -10,7 +10,7 @@ from request_handler import RequestHandler
 
 class RequestPanel(Gtk.Paned):
 
-    def __init__(self):
+    def __init__(self, method="GET", url=""):
         super().__init__()
         self.url_entry_field = None
         self.request_text_buffer = None
@@ -24,12 +24,12 @@ class RequestPanel(Gtk.Paned):
 
         self.upper_box = Gtk.Box.new(Gtk.Orientation.VERTICAL, 0)
 
-        self.upper_box.pack_start(self.create_url_component(), False, False, 5)
+        self.upper_box.pack_start(self.create_url_component(url), False, False, 5)
         self.upper_box.pack_start(self.create_notebook(), True, True, 0)
 
         self.pack1(self.upper_box, True, False)
 
-        self.method = "GET"
+        self.method = method
 
         self.response_text_editor = self.create_text_editor()
         self.response_text_buffer: Gtk.EntryBuffer = self.response_text_editor.get_buffer()
@@ -65,7 +65,7 @@ class RequestPanel(Gtk.Paned):
 
         return text_editor
 
-    def create_url_component(self) -> Gtk.Widget:
+    def create_url_component(self, url: str) -> Gtk.Widget:
         box = Gtk.Box.new(Gtk.Orientation.HORIZONTAL, 0)
 
         method_combo_box = Gtk.ComboBoxText.new()
@@ -80,6 +80,8 @@ class RequestPanel(Gtk.Paned):
 
         self.url_entry_field = Gtk.Entry()
         self.url_entry_field.set_placeholder_text("URL")
+        if url:
+            self.url_entry_field.set_text(url)
 
         self.send_button: Gtk.Button = Gtk.Button.new_with_label("Send")
         self.send_button.connect("clicked", self.on_send_button_clicked)

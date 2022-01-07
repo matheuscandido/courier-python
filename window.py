@@ -59,7 +59,7 @@ class CourierWindow(Gtk.ApplicationWindow):
         self.tab_panel.new_tab("New Request", RequestPanel())
 
         self.collection_manager = CollectionManager()
-        self.sidebar = Sidebar(self.collection_manager)
+        self.sidebar = Sidebar(self.collection_manager, self)
 
         hpaned.pack1(self.sidebar, False, False)
         hpaned.pack2(self.tab_panel, True, False)
