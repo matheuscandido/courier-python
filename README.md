@@ -3,9 +3,9 @@
 ### To-Do
 
 - [x] Load collections into a proper tree view on sidebar
-    - [-] Pretty renderer for colored method verbs
-    - [ ] Model  treestore with full request info from .json
+    - [x] Pretty renderer for colored method verbs
     - [ ] Collection v2.1 full spec parser
+    - [ ] Link treestore with collection dict in memory to open requests filled
 - [x] Click on request in the sidebar and open it on a new tab
 - [ ] Implement importing new collections
 - [ ] Editing and saving open requests

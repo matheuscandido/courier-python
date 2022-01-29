@@ -27,8 +27,6 @@ class CollectionManager:
                 self.colletions.append(json_content)
         logging.debug("collections imported: " + str(self.colletions))
 
-    def import_collection(self, collection_file):
-        pass
 
     def export_collection(self, name):
         pass
